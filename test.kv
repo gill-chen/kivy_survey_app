@@ -1,0 +1,100 @@
+<CustomLabel@Label>:
+    text_size: self.size
+    valign: "middle"
+    padding_x: 5
+
+<AgeInput@TextInput>:
+    multiline: False
+
+<GreyButton@Button>:
+    background_color: 1, 1, 1, 1
+    size_hint_y: None
+    height: self.parent.height * 0.120
+
+ScreenManager:
+    id: screen_manager
+    SurveyScreen:
+        id: survey_screen
+        name: 'survey'
+        manager: 'screen_manager'
+    ResultScreen:
+        id: result_screen
+        name: 'result'
+        manager: 'screen_manager'
+        age_text: survey_screen.text
+    ConfirmationScreen:
+        id: confirmation_screen
+        name: 'confirmation'
+        manager: 'screen_manager'
+
+<SurveyScreen>:
+    GridLayout:
+        cols: 2
+        padding : 30,30
+        spacing: 20, 20
+        row_default_height: '30dp'
+        Label:
+            color: 1,0,1,1
+            text: 'Male'
+            text_size: self.size
+            valign: "middle"
+
+        CheckBox:
+            group: 'check'
+            id : chk_male
+
+        Label:
+            text: 'Female'
+            text_size: self.size
+            valign: 'middle'
+
+        CheckBox:
+            group: 'check'
+            id: chk_female
+
+        CustomLabel:
+            text: 'Age'
+            text_size: self.size
+            valign: 'middle'
+
+        AgeInput:
+            id: age
+
+        GreyButton:
+            text: 'Ok'
+            on_press: root.insert_data(age)
+            on_press: app.root.current = 'result'
+
+        GreyButton:
+            text: 'Cancel'
+            on_press: app.root.stop
+
+        GreyButton:
+            text: 'Results'
+            on_press: app.root.current = 'result'
+
+
+<ResultScreen>:
+    GridLayout:
+        cols: 2
+        padding : 30,30
+        spacing: 20, 20
+        row_default_height: '30dp'
+        CustomLabel:
+            text:'Age'
+        Label:
+            text: root.age_text
+
+        Button:
+            text: 'Back to survey'
+            on_press: app.root.current = 'survey'
+        Button:
+            text: 'Submit'
+            on_press: app.root.current = 'confirmation'
+
+<ConfirmationScreen>:
+    GridLayout:
+        CustomLabel:
+            text: "Survey Submitted!"
+
+
