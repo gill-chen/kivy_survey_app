@@ -3,7 +3,7 @@
     valign: "middle"
     padding_x: 5
 
-<AgeInput@TextInput>:
+<Input@TextInput>:
     multiline: False
 
 <GreyButton@Button>:
@@ -21,7 +21,9 @@ ScreenManager:
         id: result_screen
         name: 'result'
         manager: 'screen_manager'
-        age_text: survey_screen.text
+        # takes attributes from class SurveyScreen and assigns it to its own class attribute
+        year_text: survey_screen.year
+        events_text: survey_screen.events
     ConfirmationScreen:
         id: confirmation_screen
         name: 'confirmation'
@@ -34,7 +36,6 @@ ScreenManager:
         spacing: 20, 20
         row_default_height: '30dp'
         Label:
-            color: 1,0,1,1
             text: 'Male'
             text_size: self.size
             valign: "middle"
@@ -53,16 +54,24 @@ ScreenManager:
             id: chk_female
 
         CustomLabel:
-            text: 'Age'
+            text: 'What year are you in?'
             text_size: self.size
             valign: 'middle'
 
-        AgeInput:
-            id: age
+        Input:
+            id: year
+
+        CustomLabel:
+            text: 'How many events have you attended in the past year?'
+            text_size: self.size
+            valign: 'middle'
+
+        Input:
+            id: no_of_events
 
         GreyButton:
             text: 'Ok'
-            on_press: root.insert_data(age)
+            on_press: root.insert_data(year, no_of_events)
             on_press: app.root.current = 'result'
 
         GreyButton:
@@ -81,16 +90,24 @@ ScreenManager:
         spacing: 20, 20
         row_default_height: '30dp'
         CustomLabel:
-            text:'Age'
+            text:'What year are you in?'
+            # goes to the root "ResultsScreen" and gets attribute year_text
         Label:
-            text: root.age_text
+            text: root.year_text
 
+        CustomLabel:
+            text:'How many events have you attended in the past year?'
+            # goes to the root "ResultsScreen" and gets attribute events_text
+        Label:
+            text: root.events_text
         Button:
             text: 'Back to survey'
             on_press: app.root.current = 'survey'
         Button:
             text: 'Submit'
             on_press: app.root.current = 'confirmation'
+            on_press: root.submit_data(root.year_text, root.events_text)
+
 
 <ConfirmationScreen>:
     GridLayout:
